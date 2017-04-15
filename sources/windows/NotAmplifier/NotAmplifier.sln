@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotAmplifier", "NotAmplifier\NotAmplifier.csproj", "{0822A580-B065-4702-82EC-D349334AECE6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotAmpTestWindow", "NotAmpTestWindow\NotAmpTestWindow.csproj", "{CDA0F03E-0D30-4195-97A4-B0FF5C86E4C8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0822A580-B065-4702-82EC-D349334AECE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0822A580-B065-4702-82EC-D349334AECE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0822A580-B065-4702-82EC-D349334AECE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0822A580-B065-4702-82EC-D349334AECE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDA0F03E-0D30-4195-97A4-B0FF5C86E4C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDA0F03E-0D30-4195-97A4-B0FF5C86E4C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDA0F03E-0D30-4195-97A4-B0FF5C86E4C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDA0F03E-0D30-4195-97A4-B0FF5C86E4C8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
