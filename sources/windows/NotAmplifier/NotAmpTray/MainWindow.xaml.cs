@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,10 +26,20 @@ namespace NotAmpTray
         {
             InitializeComponent();
 
+            
+comboPorts.Items.Clear();
+
+            foreach (string PortName in SerialPort.GetPortNames())
+            {
+                comboPorts.Items.Add(PortName);
+            }
+
             DataContext = new MainWindowViewModel();
+
+            Window_Loaded(null, null);
         }
 
-        private void Window_Initialized(object sender, EventArgs e)
+        private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             var setting          = Properties.Settings.Default;
             TrayIcon.IconSource  = this.Icon;
@@ -49,6 +60,11 @@ namespace NotAmpTray
                 }
             };
 
+            //! 利用可能なシリアルポート名を取得し、コンボボックスにセットする.
+            if (comboPorts.Items.Count > 0)
+            {
+                comboPorts.SelectedIndex = 0;
+            }
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

@@ -6,6 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Moral.Util;
 
+using NotAmplifier;
+using NotAmplifier.Protocol;
+
 namespace NotAmpTray
 {
     class MainWindowViewModel: Moral.Model.SimpleModel
@@ -27,6 +30,14 @@ namespace NotAmpTray
             set
             {
                 SetProperty(ref _IsDeviceEnable, value);
+
+                if ( value )
+                {
+                    //notampConnector.Open();
+                }else
+                {
+                    //notampConnector.Close();
+                }
             }
         }
 
@@ -46,9 +57,19 @@ namespace NotAmpTray
             }
         }
 
+        private NotAmpConnector notampConnector;
+
+        void NotAmpDataRecievedHandler(object sender, NotAmpDataRecievedEventArgs e)
+        {
+
+        }
+
         public MainWindowViewModel()
         {
             IsDeviceEnable = true;
+
+            notampConnector = new NotAmpConnector();
+            notampConnector.OnNotAmpDataRecieved += NotAmpDataRecievedHandler;
         }
     }
 }

@@ -34,11 +34,6 @@ namespace NotAmpTestWindow
                 comboPort.Items.Add(PortName);
             }
 
-            if (comboPort.Items.Count > 0)
-            {
-                comboPort.SelectedIndex = 0;
-            }
-
             //! ボーレート選択コンボボックスに選択項目をセットする.
             int[] baudrates = { 4800, 9600, 19200, 115200 };
             comboBaudrate.Items.Clear();

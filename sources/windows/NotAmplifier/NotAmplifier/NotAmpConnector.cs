@@ -13,10 +13,10 @@ namespace NotAmplifier
 
     public class NotAmpConnector
     {
-        public int       BaudRate  { get { return serialPort.BaudRate; }  }
+        public int       BaudRate  { get { return serialPort.BaudRate;  } }
         public Handshake Handshake { get { return serialPort.Handshake; } }
-        public bool      IsOpen    { get { return serialPort.IsOpen;  } }
-        public string    PortName  { get { return serialPort.PortName; } }
+        public bool      IsOpen    { get { return serialPort.IsOpen;    } }
+        public string    PortName  { get { return serialPort.PortName;  }  set { serialPort.PortName = value; } }
 
         private SerialPort serialPort = new SerialPort();
         private static int MessageSize;
@@ -60,7 +60,7 @@ namespace NotAmplifier
                 var msg = Message.ToStruct(data);
 
                 var ea = new NotAmpDataRecievedEventArgs(msg);
-                OnNotAmpDataRecieved(this, ea);
+                OnNotAmpDataRecieved?.Invoke(this, ea);
 
             }
             catch (Exception ex)

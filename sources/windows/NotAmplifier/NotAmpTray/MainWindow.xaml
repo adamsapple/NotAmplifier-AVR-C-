@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:NotAmpTray"
         xmlns:moral="clr-namespace:Moral"
         mc:Ignorable="d"
-        Title="MainWindow" Height="221.803" Width="289.971" Initialized="Window_Initialized" Closing="Window_Closing" ResizeMode="NoResize">
+        Title="MainWindow" Height="221.803" Width="289.971"  Loaded="Window_Loaded" Closing="Window_Closing" ResizeMode="NoResize" Visibility="Hidden">
     <Window.Resources>
         <ContextMenu x:Key="menuTrayMenu">
             <MenuItem Header="Option..." Click="MenuItem_Config_Click" />
@@ -53,6 +53,7 @@
                 <StackPanel Margin="8" VerticalAlignment="Top" >
                     <CheckBox x:Name="chkIsStartUp" Content="StartUpに登録する" IsChecked="{Binding IsStartUp, Mode=TwoWay}" HorizontalAlignment="Left" />
                     <CheckBox x:Name="chkIsDeviceEnable" Content="NotAmpの入力を有効にする" IsChecked="{Binding IsDeviceEnable, Mode=TwoWay}" HorizontalAlignment="Left" />
+                    <ComboBox x:Name="comboPorts"/>
                 </StackPanel>
             </TabItem>
             <TabItem>
