@@ -1,0 +1,54 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:VolumeWatcher.Style">
+    <FontFamily x:Key="Awesome">/VolumeWatcher;component/resources/#FontAwesome</FontFamily>
+
+    <Style TargetType="TextBlock" x:Key="IconBase">
+        <Style.Setters>
+            <Setter Property="FontFamily" Value="{StaticResource Awesome}"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="MinWidth" Value="14"/>
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="1,0,1,0" />
+        </Style.Setters>
+    </Style>
+    <Style TargetType="TextBlock" BasedOn="{StaticResource IconBase}" x:Key="Icon_File">
+        <Setter Property="Text" Value="&#xf016;" />
+    </Style>
+    <Style TargetType="TextBlock" BasedOn="{StaticResource IconBase}" x:Key="Icon_TextFile">
+        <Setter Property="Text" Value="&#xf0f6;" />
+    </Style>
+    <Style TargetType="TextBlock" BasedOn="{StaticResource IconBase}" x:Key="Icon_SoundFile">
+        <Setter Property="Text" Value="&#xf1c7;" />
+    </Style>
+    <Style TargetType="TextBlock" BasedOn="{StaticResource IconBase}" x:Key="Icon_Gear">
+        <Setter Property="Text" Value="&#xf013;" />
+    </Style>
+    <Style TargetType="TextBlock" BasedOn="{StaticResource IconBase}" x:Key="Icon_Find">
+        <Setter Property="Text" Value="&#xf002;" />
+    </Style>
+    <Style TargetType="TextBlock" BasedOn="{StaticResource IconBase}" x:Key="Icon_Auther">
+        <Setter Property="Text" Value="&#xf007;" />
+    </Style>
+    <Style TargetType="TextBlock" BasedOn="{StaticResource IconBase}" x:Key="Icon_Speaker">
+        <Setter Property="Text" Value="&#xf026;" />
+    </Style>
+    <Style TargetType="TextBlock" BasedOn="{StaticResource IconBase}" x:Key="Icon_Slash">
+        <Setter Property="Text" Value="&#xf05e;" />
+    </Style>
+    <Style TargetType="TextBlock" BasedOn="{StaticResource IconBase}" x:Key="Icon_MicSlash">
+        <Setter Property="Text" Value="&#xf131;" />
+    </Style>
+    <Style TargetType="TextBlock" BasedOn="{StaticResource IconBase}" x:Key="Icon_Experiment">
+        <Setter Property="Text" Value="&#xf0c3;" />
+    </Style>
+    <Style TargetType="TextBlock" BasedOn="{StaticResource IconBase}" x:Key="Icon_Wrench">
+        <Setter Property="Text" Value="&#xf0ad;" />
+    </Style>
+    <!--<TextBlock x:Key="Icon_Gear" Text="&#xf2c3;" FontFamily="{StaticResource Awesome}" FontSize="20" />
+    <TextBlock x:Key="Icon_Gear" Text="&#xf026;" FontFamily="{StaticResource Awesome}" FontSize="20" />
+    <TextBlock x:Key="Icon_Gear" Text="&#xf05e;" FontFamily="{StaticResource Awesome}" FontSize="20" />
+    <TextBlock x:Key="Icon_Gear" Text="&#xf131;" FontFamily="{StaticResource Awesome}" FontSize="20" />
+    <TextBlock x:Key="Icon_Gear" Text="&#xf0c3;" FontFamily="{StaticResource Awesome}" FontSize="20" />-->
+    <!--<TextBlock FontSize="20" Text="&#xf016;&#xf0f6;&#xf1c7;&#xf013;&#xf007;&#xf2c3;&#xf026;&#xf05e;&#xf131;&#xf0c3;" FontFamily="{StaticResource Awesome}" />-->
+</ResourceDictionary>

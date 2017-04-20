@@ -5,5 +5,8 @@
     <Setting Name="tray_tooltip" Type="System.String" Scope="Application">
       <Value Profile="(Default)">tray_tooltipsdaf</Value>
     </Setting>
+    <Setting Name="GitURL" Type="System.String" Scope="User">
+      <Value Profile="(Default)">https://github.com/adamsapple/NotAmplifier-AVR-CS/</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

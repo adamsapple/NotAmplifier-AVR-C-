@@ -5,16 +5,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:tb="http://www.hardcodet.net/taskbar"
         xmlns:local="clr-namespace:NotAmpTray"
+        xmlns:moral="clr-namespace:Moral"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525" Initialized="Window_Initialized" Closing="Window_Closing" ResizeMode="NoResize">
+        Title="MainWindow" Height="221.803" Width="289.971" Initialized="Window_Initialized" Closing="Window_Closing" ResizeMode="NoResize">
     <Window.Resources>
         <ContextMenu x:Key="menuTrayMenu">
-            <MenuItem Header="Config" Click="MenuItem_Config_Click" />
+            <MenuItem Header="Option..." Click="MenuItem_Config_Click" />
             <Separator />
             <MenuItem Header="Close" Command="{Binding AppCloseCommand}" />
         </ContextMenu>
+        <moral:AssemblyInfo                 x:Key="assemblyInfo" />
     </Window.Resources>
-    <Grid>
+    <DockPanel>
         <tb:TaskbarIcon x:Name="TrayIcon"
                     Visibility="Visible"
                     ToolTipText="TrayIcon"
@@ -22,7 +24,6 @@
                     MenuActivation="LeftOrRightClick"
                     PopupActivation="DoubleClick"
       />
-        <CheckBox x:Name="chkIsStartUp" Content="StartUpに登録する" IsChecked="{Binding IsStartUp, Mode=TwoWay}" HorizontalAlignment="Left" />
         <!--
                     IconSource="/Images/TrayIcons/Logo.ico"
                     ContextMenu="{StaticResource TrayMenu}"
@@ -30,7 +31,79 @@
                     TrayPopup="{StaticResoure TrayStatusPopup}"
                     PopupActivation="DoubleClick"
                     TrayToolTip="{StaticResource TrayToolTip}"
-      -->
-        
-    </Grid>
+        -->
+        <TabControl x:Name="tabControl" DockPanel.Dock="Top" TabStripPlacement="Left" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Margin="0" SelectionChanged="tabControl_SelectionChanged" BorderThickness="1,0,0,0" BorderBrush="#FFDADADA" Background="Transparent" >
+            <TabItem x:Name="tiStatus">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <!--<TextBlock Style="{StaticResource Icon_Find}" />-->
+                        <TextBlock Text="状態"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <DockPanel Margin="8" ScrollViewer.VerticalScrollBarVisibility="Disabled" RenderOptions.EdgeMode="Aliased" LastChildFill="False">
+                </DockPanel>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <!--<TextBlock Style="{StaticResource Icon_Gear}" />-->
+                        <TextBlock Text="設定"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <StackPanel Margin="8" VerticalAlignment="Top" >
+                    <CheckBox x:Name="chkIsStartUp" Content="StartUpに登録する" IsChecked="{Binding IsStartUp, Mode=TwoWay}" HorizontalAlignment="Left" />
+                    <CheckBox x:Name="chkIsDeviceEnable" Content="NotAmpの入力を有効にする" IsChecked="{Binding IsDeviceEnable, Mode=TwoWay}" HorizontalAlignment="Left" />
+                </StackPanel>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <!--<Path Style="{StaticResource AboutIcon}" />-->
+                        <!--<TextBlock Style="{StaticResource Icon_Auther}" />-->
+                        <TextBlock Text="About"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <StackPanel Margin="8" VerticalAlignment="Top">
+                    <TextBlock HorizontalAlignment="Center" Text="{Binding Product, Source={StaticResource assemblyInfo}}" />
+                    <TextBlock HorizontalAlignment="Center" Text="{Binding ProductVersion, Source={StaticResource assemblyInfo}, StringFormat=Ver: \{0\}}"  />
+                    <TextBlock HorizontalAlignment="Center" Text="{Binding BuildDateTime, Source={StaticResource assemblyInfo}, StringFormat=Build: \{0\}}"  Padding="5,10,5,0" >
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Style.Resources>
+                                    <Storyboard x:Key="EnterAnimation">
+                                        <ColorAnimation Storyboard.TargetProperty="(Foreground).(SolidColorBrush.Color)" 
+                                                    To="Black" Duration="0:0:1.5" BeginTime="0:0:0.5"  FillBehavior="HoldEnd"/>
+                                    </Storyboard>
+                                    <Storyboard x:Key="Exitnimation">
+                                        <ColorAnimation Storyboard.TargetProperty="(Foreground).(SolidColorBrush.Color)" 
+                                                    To="Transparent" Duration="0:0:0.5" FillBehavior="Stop"/>
+                                    </Storyboard>
+                                </Style.Resources>
+                                <Setter Property="Foreground" Value="Transparent" />
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <!--<Setter Property="Foreground" Value="Black" />-->
+                                        <Trigger.EnterActions>
+                                            <BeginStoryboard Storyboard="{StaticResource EnterAnimation}"/>
+                                        </Trigger.EnterActions>
+                                        <Trigger.ExitActions>
+                                            <BeginStoryboard Storyboard="{StaticResource Exitnimation}"/>
+                                        </Trigger.ExitActions>
+                                    </Trigger>
+                                    <!--<EventTrigger RoutedEvent="MouseEnter"></EventTrigger>-->
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+
+                    </TextBlock>
+                    <!--<TextBlock x:Name="txtVersion" TextWrapping="Wrap" HorizontalAlignment="Center" Text="{DynamicResource AsmInfo_Version}" />-->
+                    <Label HorizontalAlignment="Center">
+                        <Hyperlink NavigateUri="{Binding GitURL, Mode=OneWay}" RequestNavigate="Hyperlink_RequestNavigate">
+                            <TextBlock Text="Go to Website."/>
+                        </Hyperlink>
+                    </Label>
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+    </DockPanel>
 </Window>

@@ -31,5 +31,17 @@ namespace NotAmpTray.Properties {
                 return ((string)(this["tray_tooltip"]));
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://github.com/adamsapple/NotAmplifier-AVR-CS/")]
+        public string GitURL {
+            get {
+                return ((string)(this["GitURL"]));
+            }
+            set {
+                this["GitURL"] = value;
+            }
+        }
     }
 }

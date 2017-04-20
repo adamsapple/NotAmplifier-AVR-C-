@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -59,6 +60,38 @@ namespace NotAmpTray
         private void MenuItem_Config_Click(object sender, RoutedEventArgs e)
         {
             Show();
+        }
+
+        /// <summary>
+        /// ハイパーリンククリック時のイベント
+        /// ブラウザで所定URL(e.Uri.AbsoluteUri)に遷移
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+            e.Handled = true;
+        }
+
+        /// <summary>
+        /// 選択Tabが変更になった際のイベント。
+        /// 「状態」では、ピークメータ更新用タイマーを動作させ、それ以外の時は止める。
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void tabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var ti = (sender as TabControl).SelectedItem as TabItem;
+
+            if (ti == tiStatus)
+            {
+                //viewmodel.StartPeakMeter();
+            }
+            else
+            {
+                //viewmodel.StopPeakMeter();
+            }
         }
     }
 }

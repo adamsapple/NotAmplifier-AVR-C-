@@ -12,6 +12,24 @@ namespace NotAmpTray
     {
         public AppCloseCommand AppCloseCommand { get; private set; } = new AppCloseCommand();
 
+        public string GitURL
+        {
+            get { return Properties.Settings.Default.GitURL; }
+        }
+
+        private bool _IsDeviceEnable;
+        public bool IsDeviceEnable
+        {
+            get
+            {
+                return _IsDeviceEnable;
+            }
+            set
+            {
+                SetProperty(ref _IsDeviceEnable, value);
+            }
+        }
+
         private bool _IsStartUp;
         public bool IsStartUp
         {
@@ -26,6 +44,11 @@ namespace NotAmpTray
                     WindowsUtil.UnregiserStartUp_CurrentUserRun();
                 }
             }
+        }
+
+        public MainWindowViewModel()
+        {
+            IsDeviceEnable = true;
         }
     }
 }
