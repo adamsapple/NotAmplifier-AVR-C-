@@ -7,7 +7,8 @@
         xmlns:local="clr-namespace:NotAmpTray"
         xmlns:moral="clr-namespace:Moral"
         mc:Ignorable="d"
-        Title="MainWindow" Height="221.803" Width="289.971"  Loaded="Window_Loaded" Closing="Window_Closing" ResizeMode="NoResize" Visibility="Hidden">
+        Title="MainWindow" Height="221.803" Width="289.971" ResizeMode="NoResize" Visibility="Visible" 
+        Loaded="Window_Loaded" Closing="Window_Closing" Closed="Window_Closed" >
     <Window.Resources>
         <ContextMenu x:Key="menuTrayMenu">
             <MenuItem Header="Option..." Click="MenuItem_Config_Click" />
@@ -43,7 +44,7 @@
                 <DockPanel Margin="8" ScrollViewer.VerticalScrollBarVisibility="Disabled" RenderOptions.EdgeMode="Aliased" LastChildFill="False">
                 </DockPanel>
             </TabItem>
-            <TabItem>
+            <TabItem IsSelected="True">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <!--<TextBlock Style="{StaticResource Icon_Gear}" />-->
@@ -52,8 +53,11 @@
                 </TabItem.Header>
                 <StackPanel Margin="8" VerticalAlignment="Top" >
                     <CheckBox x:Name="chkIsStartUp" Content="StartUpに登録する" IsChecked="{Binding IsStartUp, Mode=TwoWay}" HorizontalAlignment="Left" />
-                    <CheckBox x:Name="chkIsDeviceEnable" Content="NotAmpの入力を有効にする" IsChecked="{Binding IsDeviceEnable, Mode=TwoWay}" HorizontalAlignment="Left" />
-                    <ComboBox x:Name="comboPorts"/>
+                    <CheckBox x:Name="chkIsDeviceEnable" Content="NotAmpの入力を有効にする" IsChecked="{Binding IsDeviceEnable, Mode=TwoWay}" HorizontalAlignment="Left" Margin="0,4,0,0" />
+                    <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                        <TextBlock Text="Serial Port " Margin="0" VerticalAlignment="Center"/>
+                        <ComboBox x:Name="comboPorts" ItemsSource="{Binding ComPorts}" Text="{Binding SerialPortName}" Margin="3,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Right" Width="80"/>
+                    </StackPanel>
                 </StackPanel>
             </TabItem>
             <TabItem>

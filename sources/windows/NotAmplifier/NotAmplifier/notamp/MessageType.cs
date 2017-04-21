@@ -11,17 +11,17 @@ namespace NotAmplifier.Protocol
     public static class MessageOp
     {
         //! シリアルから流れてくるメッセージ群
-        const string MSG_OP_NOP = "nop";					//!< no operation
-        const string MSG_OP_OK  = "ok_";					//!< ok
-        const string MSG_OP_ERR = "err";					//!< err
-        const string MSG_OP_WAY = "way";					//!< who are you
-        const string MSG_OP_IAM = "iam";					//!< i am
-        const string MSG_OP_VER = "ver";					//!< version
-        const string MSG_OP_MIC = "mic";					//!< mic
-        const string MSG_OP_MPW = "mpw";					//!< mic power
-        const string MSG_OP_VOL = "vol";					//!< volume
-        const string MSG_OP_PKM = "pkm";					//!< peak meter
-        const string MSG_OP_PIN = "pin";					//!< ping
+        public const string MSG_OP_NOP = "nop";					//!< no operation
+        public const string MSG_OP_OK  = "ok_";					//!< ok
+        public const string MSG_OP_ERR = "err";					//!< err
+        public const string MSG_OP_WAY = "way";					//!< who are you
+        public const string MSG_OP_IAM = "iam";					//!< i am
+        public const string MSG_OP_VER = "ver";					//!< version
+        public const string MSG_OP_MIC = "mic";					//!< mic
+        public const string MSG_OP_MPW = "mpw";					//!< mic power
+        public const string MSG_OP_VOL = "vol";					//!< volume
+        public const string MSG_OP_PKM = "pkm";					//!< peak meter
+        public const string MSG_OP_PIN = "pin";					//!< ping
 
         static string[] OPERATIONS = new string[] {
              MSG_OP_NOP,

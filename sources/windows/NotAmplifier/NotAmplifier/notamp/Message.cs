@@ -151,7 +151,7 @@ namespace NotAmplifier.Protocol
 
             serial.Write(data, 0, data.Length);
 
-            Debug.WriteLine(msg);
+            Debug.WriteLine($"SerialPort.Write : {msg}");
         }
     }
 }

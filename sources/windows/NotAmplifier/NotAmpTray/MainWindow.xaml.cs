@@ -29,17 +29,19 @@ namespace NotAmpTray
         {
             viewModel = new MainWindowViewModel();
 
-            InitializeComponent();
-
             
-comboPorts.Items.Clear();
+
+            /*
+            comboPorts.Items.Clear();
 
             foreach (string PortName in SerialPort.GetPortNames())
             {
                 comboPorts.Items.Add(PortName);
             }
-
+            */
             DataContext = viewModel;
+
+            InitializeComponent();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -66,7 +68,7 @@ comboPorts.Items.Clear();
             //! 利用可能なシリアルポート名を取得し、コンボボックスにセットする.
             if (comboPorts.Items.Count > 0)
             {
-                comboPorts.SelectedIndex = 0;
+                //comboPorts.SelectedIndex = 0;
             }
         }
 
@@ -76,6 +78,11 @@ comboPorts.Items.Clear();
 
             Hide();
             e.Cancel = true;
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            viewModel.Dispose();
         }
 
         private void MenuItem_Config_Click(object sender, RoutedEventArgs e)

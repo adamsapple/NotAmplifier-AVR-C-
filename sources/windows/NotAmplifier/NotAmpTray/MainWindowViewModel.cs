@@ -9,10 +9,11 @@ using Moral.Util;
 using NotAmplifier;
 using NotAmplifier.Protocol;
 using System.IO.Ports;
+using System.Collections.ObjectModel;
 
 namespace NotAmpTray
 {
-    class MainWindowViewModel: Moral.Model.SimpleModel
+    class MainWindowViewModel: Moral.Model.SimpleModel, IDisposable
     {
         public AppCloseCommand AppCloseCommand { get; private set; } = new AppCloseCommand();
 
@@ -25,7 +26,7 @@ namespace NotAmpTray
             }
             set
             {
-                if(Array.IndexOf(SerialPort.GetPortNames(), value) >= 0)
+                if(ComPorts.IndexOf(value) >= 0)
                 {
                     _SerialPortName = value;
 
@@ -33,6 +34,8 @@ namespace NotAmpTray
                 }
             }
         }
+
+        public ObservableCollection<string> ComPorts { get; private set; }        
 
         private bool _IsDeviceEnable;
         public bool IsDeviceEnable
@@ -43,12 +46,19 @@ namespace NotAmpTray
             }
             set
             {
+                if (value && _SerialPortName==null)
+                {
+                    IsDeviceEnable = false;
+                    return;
+                }
+
                 SetProperty(ref _IsDeviceEnable, value);
 
                 if ( value )
                 {
                     notampConnector.Open();
-                }else
+                }
+                else
                 {
                     notampConnector.Close();
                 }
@@ -83,26 +93,30 @@ namespace NotAmpTray
             //! セッティング情報読み込み
             var setting = Properties.Settings.Default;
 
-            //! Configに書き込まれたAssemblyVersionを比較し、
-            //!  今回起動したApplicationを差異があれば、コンフィグのUpgradeを行う。
-            var assemblyVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-            if (!assemblyVersion.Equals(setting.Version))
+            if (!setting.IsUpgrade)
             {
-                setting.Upgrade();
-                setting.Version = assemblyVersion;
-                setting.Save();
+                setting.Upgrade();                      //!< Upgradeを実行する
+                setting.IsUpgrade = true;               //!<「Upgradeを実行した」という情報を設定する
+                setting.Save();                         //!< 現行バージョンの設定を保存する
             }
 
-            GitURL         = setting.GitURL;
-            SerialPortName = setting.SerialPortName;
+            //! NotAmpコネクタの初期化
+            notampConnector = new NotAmpConnector();
+            notampConnector.OnNotAmpDataRecieved += NotAmpDataRecievedHandler;
+
+            //! ComPorts一覧初期化
+            var ComPorts = new ObservableCollection<string>();
+            Array.ForEach<string>(SerialPort.GetPortNames(), (str)=>ComPorts.Add(str));
+
+            this.ComPorts   = ComPorts;
+            GitURL          = setting.GitURL;
+            _SerialPortName = setting.SerialPortName;
+
             
-            if(0 > Array.IndexOf(SerialPort.GetPortNames(), SerialPortName))
+            if (0 > ComPorts.IndexOf(SerialPortName))
             {
                 SerialPortName = null;
             }
-
-            notampConnector = new NotAmpConnector();
-            notampConnector.OnNotAmpDataRecieved += NotAmpDataRecievedHandler;
 
             if (SerialPortName != null)
             {
@@ -120,6 +134,11 @@ namespace NotAmpTray
             setting.IsDeviceEnable = IsDeviceEnable;
 
             setting.Save();
+        }
+
+        public void Dispose()
+        {
+            notampConnector.Close();
         }
     }
 }
