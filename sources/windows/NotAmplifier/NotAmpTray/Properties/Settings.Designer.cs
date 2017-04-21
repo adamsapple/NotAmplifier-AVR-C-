@@ -32,15 +32,36 @@ namespace NotAmpTray.Properties {
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("https://github.com/adamsapple/NotAmplifier-AVR-CS/")]
         public string GitURL {
             get {
                 return ((string)(this["GitURL"]));
             }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string SerialPortName {
+            get {
+                return ((string)(this["SerialPortName"]));
+            }
             set {
-                this["GitURL"] = value;
+                this["SerialPortName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IsDeviceEnable {
+            get {
+                return ((bool)(this["IsDeviceEnable"]));
+            }
+            set {
+                this["IsDeviceEnable"] = value;
             }
         }
     }

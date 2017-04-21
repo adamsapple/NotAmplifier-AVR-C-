@@ -8,6 +8,7 @@ using Moral.Util;
 
 using NotAmplifier;
 using NotAmplifier.Protocol;
+using System.IO.Ports;
 
 namespace NotAmpTray
 {
@@ -15,9 +16,22 @@ namespace NotAmpTray
     {
         public AppCloseCommand AppCloseCommand { get; private set; } = new AppCloseCommand();
 
-        public string GitURL
-        {
-            get { return Properties.Settings.Default.GitURL; }
+        public string GitURL { get; private set; } = null;
+        public string _SerialPortName;
+        public string SerialPortName {
+            get
+            {
+                return _SerialPortName;
+            }
+            set
+            {
+                if(Array.IndexOf(SerialPort.GetPortNames(), value) >= 0)
+                {
+                    _SerialPortName = value;
+
+                    notampConnector.PortName = _SerialPortName;
+                }
+            }
         }
 
         private bool _IsDeviceEnable;
@@ -33,10 +47,10 @@ namespace NotAmpTray
 
                 if ( value )
                 {
-                    //notampConnector.Open();
+                    notampConnector.Open();
                 }else
                 {
-                    //notampConnector.Close();
+                    notampConnector.Close();
                 }
             }
         }
@@ -66,10 +80,46 @@ namespace NotAmpTray
 
         public MainWindowViewModel()
         {
-            IsDeviceEnable = true;
+            //! セッティング情報読み込み
+            var setting = Properties.Settings.Default;
+
+            //! Configに書き込まれたAssemblyVersionを比較し、
+            //!  今回起動したApplicationを差異があれば、コンフィグのUpgradeを行う。
+            var assemblyVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+            if (!assemblyVersion.Equals(setting.Version))
+            {
+                setting.Upgrade();
+                setting.Version = assemblyVersion;
+                setting.Save();
+            }
+
+            GitURL         = setting.GitURL;
+            SerialPortName = setting.SerialPortName;
+            
+            if(0 > Array.IndexOf(SerialPort.GetPortNames(), SerialPortName))
+            {
+                SerialPortName = null;
+            }
 
             notampConnector = new NotAmpConnector();
             notampConnector.OnNotAmpDataRecieved += NotAmpDataRecievedHandler;
+
+            if (SerialPortName != null)
+            {
+                notampConnector.PortName = SerialPortName;
+            }
+
+            IsDeviceEnable = setting.IsDeviceEnable;
+        }
+
+        public void SaveSettings()
+        {
+            var setting = Properties.Settings.Default;
+
+            setting.SerialPortName = SerialPortName;
+            setting.IsDeviceEnable = IsDeviceEnable;
+
+            setting.Save();
         }
     }
 }

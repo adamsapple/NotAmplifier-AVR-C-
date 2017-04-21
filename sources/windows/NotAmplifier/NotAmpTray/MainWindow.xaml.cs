@@ -22,8 +22,13 @@ namespace NotAmpTray
     /// </summary>
     public partial class MainWindow : Window
     {
+
+        MainWindowViewModel viewModel;
+
         public MainWindow()
         {
+            viewModel = new MainWindowViewModel();
+
             InitializeComponent();
 
             
@@ -34,9 +39,7 @@ comboPorts.Items.Clear();
                 comboPorts.Items.Add(PortName);
             }
 
-            DataContext = new MainWindowViewModel();
-
-            Window_Loaded(null, null);
+            DataContext = viewModel;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -69,6 +72,8 @@ comboPorts.Items.Clear();
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            viewModel.SaveSettings();
+
             Hide();
             e.Cancel = true;
         }
