@@ -48,6 +48,18 @@
 #include "mcp3002d.h"
 #include "namp.h"
 
+ uint8_t mcusr_mirror __attribute__ ((section (".noinit")));
+
+ void get_mcusr(void) \
+ __attribute__((naked)) \
+ __attribute__((section(".init3")));
+ void get_mcusr(void)
+ {
+	 mcusr_mirror = MCUSR;
+	 MCUSR = 0;
+	 wdt_disable();
+ }
+
 
 #define	PRESCALE_1				0b001;
 #define	PRESCALE_8				0b010;
@@ -69,7 +81,9 @@
 
 
 
-volatile int timer				= COUNTER_LED;
+volatile int			timer				= COUNTER_LED;
+unsigned char	rcv_offset			= 0;
+unsigned char			usart_process		= 0;
 typedef void (*PFUNC_usart_transmit)(const void*, unsigned char);
 
 
@@ -94,6 +108,28 @@ ISR(TIMER0_COMPB_vect)
 	OCR0B = (OCR0B-(256-COUNTER_LED_OP)+256)&0xFF;	// 比較値を減算していくことで、COUNTER_LED_OPのカウンタの代用にする
 
 	PORT_LED ^= _BV(PORT_LED_BIT);
+}
+
+ISR(WDT_OVERFLOW_vect)
+{
+	cli();
+	if(usart_process == 0)
+	{
+		wdt_reset();
+		WDTCSR |= _BV(WDE);
+		WDTCSR |= _BV(WDIE);
+			
+		PWM0A_OFF();
+		rcv_offset = 0;
+	}
+	else
+	{
+		wdt_enable(WDTO_500MS);
+		//WDTCSR ^= _BV(WDE);
+		//WDTCSR ^= _BV(WDIE);
+	}
+	PORT_LED ^= _BV(PORT_LED_BIT);
+	sei();
 }
 
 
@@ -138,21 +174,17 @@ static inline void initialize()
 	DDR_PWM	 |= _BV(PORT_PWM_BIT);				// PWM出力ポートの該当BITを出力設定に。
 	PORT_PWM &= ~_BV(PORT_PWM_BIT);				// PORT_PWM_BITをLOに設定
 
-	DDR_MPW	 &= ~_BV(PORT_MPW_BIT);				// Mic Powerポートを入力に設定
-	PORT_MPW |= _BV(PORT_MPW_BIT);				// PORT_PWM_BITをプルアップ
-
 	DDR_RELAY_SWT	|= _BV(PORT_RELAY_SWT_BIT);		// Relay Switchポートを出力に設定
 	PORT_RELAY_SWT	&= ~_BV(PORT_RELAY_SWT_BIT);	// PORT_RELAY_SWT_BITをLOに設定
+
+	DDR_MPW	 &= ~_BV(PORT_MPW_BIT);				// Mic Powerポートを入力に設定
+	PORT_MPW |= _BV(PORT_MPW_BIT);				// PORT_PWM_BITをプルアップ
 
 #if defined USE_RTSCTS
 	DDR_CTSRTS	|= _BV(CTS_OUT);				// CTSを出力に設定
 	DDR_CTSRTS	&= ~_BV(RTS_IN);				// RTSを入力に設定
 	PORT_CTSRTS |= _BV(RTS_IN);					// RTS_INをプルアップ
 #endif
-
-	DDR_MPW	 &= ~_BV(PORT_MPW_BIT);				// mic_powerを入力に設定
-	PORT_MPW |= _BV(PORT_MPW_BIT);				// mic_powerをプルアップ
-
 
 	//======================================
 	// timer configuration.
@@ -218,6 +250,18 @@ void msg_make_and_send_response(namp_message *pmsg, char opid, namp_status *psta
 	}
 }
 
+ void usart_recieve_bytes_wdt(char *pdata, unsigned char size)
+ {
+	 rcv_offset = 0;
+	 
+	 memset(pdata, 0, size);
+
+	 while(rcv_offset < size)
+	 {
+		 pdata[rcv_offset] = usart_recieve();
+		 rcv_offset++;
+	 }
+ }
 //=============================================================================
 //
 //! main.
@@ -237,28 +281,43 @@ int main()
 	_delay_ms(DELAY_RELAY_SWITCH_ON);
 	PORT_RELAY_SWT	|= _BV(PORT_RELAY_SWT_BIT);		//!< Relay SwitchをHIに。
 
+	wdt_enable(WDTO_2S);
+	WDTCSR |= _BV(WDE);
+	WDTCSR |= _BV(WDIE);
+
+
 	while(1)
 	{
-		usart_recieve_bytes(buf, sizeof(buf));		//!< 受信
-		opid = namp_msg_get(&msg, buf);				//!< message解析
+		usart_process = 0;
+		usart_recieve_bytes_wdt(buf, sizeof(buf));		//!< 受信
+		opid = namp_msg_get(&msg, buf);					//!< message解析
 		
 		//! msgが無効な場合はやり直し
 		if(opid == MSG_OP_ID_NOP)
 		{
 			continue;
 		}
+		wdt_reset();
+
+		if(opid == MSG_OP_ID_WAY)
+		{
+			stats_plv.mic = -1;
+			stats_plv.mpw = 2;
+			stats_plv.vol = -1;
+		}
 
 		status_update(&stats);										//!< ステータス更新
 		
+		usart_process = 1;
 		msg_make_and_send_response(&msg, opid, &stats);
 		
-		if(stats.mic != stats_plv.mic){
+		if(opid != MSG_OP_ID_MIC && stats.mic != stats_plv.mic){
 			msg_make_and_send_response(&msg, MSG_OP_ID_MIC, &stats);
 		}
-		if(stats.vol != stats_plv.vol){
+		if(opid != MSG_OP_ID_VOL && stats.vol != stats_plv.vol){
 			msg_make_and_send_response(&msg, MSG_OP_ID_VOL, &stats);
 		}
-		if(stats.mpw != stats_plv.mpw){
+		if(opid != MSG_OP_ID_MPW && stats.mpw != stats_plv.mpw){
 			msg_make_and_send_response(&msg, MSG_OP_ID_MPW, &stats);
 		}
 

@@ -85,7 +85,12 @@ namespace NotAmpTray
 
         void NotAmpDataRecievedHandler(object sender, NotAmpDataRecievedEventArgs e)
         {
+            switch (e.Type)
+            {
+                case MessageType.MSG_OP_ID_MPW:
 
+                    break;
+            }
         }
 
         public MainWindowViewModel()

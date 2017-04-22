@@ -31,7 +31,14 @@ namespace NotAmplifier
         /// メータ更新間隔(単位:100ナノ秒)。= 1/10000ミリ秒。
         /// 
         /// </summary>
-        private readonly long NOTAMP_REQUEST_INTERVAL = 50 * 10000;
+        private static readonly long NOTAMP_WHOAREYOU_INTERVAL = 2500 * 10000;
+        private static readonly long NOTAMP_REQUEST_INTERVAL = 50 * 10000;
+        
+
+        // ピークメータ表示用タイマ
+        private readonly TimeSpan intervalWAY = new TimeSpan(NOTAMP_WHOAREYOU_INTERVAL);
+        private readonly TimeSpan intervalPKM = new TimeSpan(NOTAMP_REQUEST_INTERVAL);
+
         /// <summary></summary>
         private DispatcherTimer StatusTimer = new DispatcherTimer(DispatcherPriority.Normal);
         
@@ -64,12 +71,20 @@ namespace NotAmplifier
             volumeMonitor = new VolumeMonitor(EDataFlow.eRender, ERole.eConsole);
             volumeMonitor.initDevice();
 
-            // ピークメータ表示用タイマ
-            StatusTimer.Interval = new TimeSpan(NOTAMP_REQUEST_INTERVAL);
+
+
             StatusTimer.Tick += (o, el) => {
-                var renderMeter = volumeMonitor.AudioDevice?.AudioMeterInformation;
-                var value = (Int16)Math.Round((renderMeter?.PeakValue ?? 0) * 1023);
-                SendNapMessage(new Message(MessageOp.MSG_OP_PKM, value, 0, 0));
+                var timer = o as DispatcherTimer;
+                if(timer.Interval == intervalWAY)
+                { 
+                    SendNapMessage(new Message(MessageOp.MSG_OP_WAY, 0, 0, 0));
+                }
+                else if (timer.Interval == intervalPKM)
+                {
+                    var renderMeter = volumeMonitor.AudioDevice?.AudioMeterInformation;
+                    var value = (Int16)Math.Round((renderMeter?.PeakValue ?? 0) * 1023);
+                    SendNapMessage(new Message(MessageOp.MSG_OP_PKM, value, 0, 0));
+                }
             };
         }
 
@@ -108,9 +123,22 @@ namespace NotAmplifier
 
                 var msg = Message.ToStruct(data);
 
+                
+
+                switch (MessageOp.OpToType(msg.op))
+                {
+                    case MessageType.MSG_OP_ID_IAM:
+                        StatusTimer.Interval = intervalPKM;
+                        break;
+                    case MessageType.MSG_OP_ID_MPW:
+                        //Debug.WriteLine(msg.val_i_a);
+                        volumeMonitor.AudioVolume.Mute = !(msg.val_i_a == 1);
+                        break;
+                }
+
+
                 var ea = new NotAmpDataRecievedEventArgs(msg);
                 OnNotAmpDataRecieved?.Invoke(this, ea);
-
             }
             catch (Exception ex)
             {
@@ -125,6 +153,7 @@ namespace NotAmplifier
             }
 
             serialPort.Open();
+            StatusTimer.Interval = intervalWAY;
             StatusTimer.Start();
         }
 

@@ -71,7 +71,7 @@
 
 #define PWM0A_ON(x)				{TCCR0A |= _BV(COM0A1);OCR0A = (x);}
 #define PWM0A_OFF()				{TCCR0A &= ~_BV(COM0A1);OCR0A = 0;}
-#define GET_MPW()				(~((PIN_MPW>>PORT_MPW_BIT)))&1
+#define GET_MPW()				((~(PIN_MPW>>PORT_MPW_BIT))&1)
 
 //! ’è”ŠÖŒW
 #define MIC_BIT_WIDTH			10

@@ -150,7 +150,7 @@ void mcp3002d_init(void)
 	DDR_SPI  |= _BV(SPI_MOSI)|_BV(SPI_USCK);	// as output.
 	DDR_SPI  |= _BV(SPI_SS0);					// as output.
 	DDR_SPI  &= ~_BV(SPI_MISO);					// as input.
-	PORT_SPI = _BV(SPI_MISO);					// as pull-up.
+	PORT_SPI |= _BV(SPI_MISO);					// as pull-up.
 
 	CSBIT_HI();
 }
