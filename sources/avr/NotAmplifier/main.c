@@ -81,9 +81,9 @@
 
 
 
-volatile int			timer				= COUNTER_LED;
+volatile int	timer				= COUNTER_LED;
 unsigned char	rcv_offset			= 0;
-unsigned char			usart_process		= 0;
+unsigned char	usart_process		= 0;
 typedef void (*PFUNC_usart_transmit)(const void*, unsigned char);
 
 
