@@ -115,7 +115,7 @@ namespace NotAmpTray
 
             this.ComPorts   = ComPorts;
             GitURL          = setting.GitURL;
-            _SerialPortName = setting.SerialPortName;
+            SerialPortName  = setting.SerialPortName;
 
             
             if (0 > ComPorts.IndexOf(SerialPortName))
