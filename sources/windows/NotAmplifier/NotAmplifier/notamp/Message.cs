@@ -145,9 +145,9 @@ namespace NotAmplifier.Protocol
     {
         public static void Write(this System.IO.Ports.SerialPort serial, Message msg)
         {
-            byte[] data = Message.ToBytes(msg);
-
             if (serial.BytesToWrite != 0) return;
+
+            byte[] data = Message.ToBytes(msg);
 
             serial.Write(data, 0, data.Length);
 

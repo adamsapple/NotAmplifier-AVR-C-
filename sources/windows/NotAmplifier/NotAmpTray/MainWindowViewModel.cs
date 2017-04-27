@@ -28,7 +28,7 @@ namespace NotAmpTray
             {
                 if(ComPorts.IndexOf(value) >= 0)
                 {
-                    _SerialPortName = value;
+                    SetProperty(ref _SerialPortName, value);
 
                     notampConnector.PortName = _SerialPortName;
                 }

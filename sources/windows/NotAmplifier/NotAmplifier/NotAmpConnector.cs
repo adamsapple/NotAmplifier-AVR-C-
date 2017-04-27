@@ -54,14 +54,16 @@ namespace NotAmplifier
 
         public NotAmpConnector()
         {
-            serialPort.BaudRate  = 9600;
-            serialPort.Handshake = Handshake.RequestToSend;
-            serialPort.DataBits  = 8;                                   //!< データビットをセットする. (データビット = 8ビット)
-            serialPort.Parity    = Parity.None;                         //!< パリティビットをセットする. (パリティビット = なし)
-            serialPort.StopBits  = StopBits.One;                        //!< ストップビットをセットする. (ストップビット = 1ビット)
-            serialPort.Encoding  = Encoding.ASCII;                      //!< 文字コードをセットする
-                                                                        //! シリアルデータ受信イベント通知設定
+            serialPort.BaudRate     = 9600;
+            serialPort.Handshake    = Handshake.RequestToSend;
+            serialPort.DataBits     = 8;                                   //!< データビットをセットする. (データビット = 8ビット)
+            serialPort.Parity       = Parity.None;                         //!< パリティビットをセットする. (パリティビット = なし)
+            serialPort.StopBits     = StopBits.One;                        //!< ストップビットをセットする. (ストップビット = 1ビット)
+            serialPort.Encoding     = Encoding.ASCII;                      //!< 文字コードをセットする
+            serialPort.WriteTimeout = 100;                                 //!< Timeout設定 
+            //! シリアルデータ受信イベント通知設定
             serialPort.DataReceived += DataReceived;
+            
 
             MessageSize = Marshal.SizeOf(typeof(Message));
 
@@ -74,9 +76,11 @@ namespace NotAmplifier
 
 
             StatusTimer.Tick += (o, el) => {
+                
                 var timer = o as DispatcherTimer;
-                if(timer.Interval == intervalWAY)
-                { 
+
+                if (timer.Interval == intervalWAY)
+                {
                     SendNapMessage(new Message(MessageOp.MSG_OP_WAY, 0, 0, 0));
                 }
                 else if (timer.Interval == intervalPKM)
@@ -90,17 +94,17 @@ namespace NotAmplifier
 
         private void SendNapMessage(Message msg)
         {
-            if (serialPort.IsOpen == false)        //!< シリアルポートをオープンしていない場合、処理を行わない.
+            if (serialPort.IsOpen == false)             //!< シリアルポートをオープンしていない場合、処理を行わない.
             {
                 return;
             }
-
             try
             {
                 serialPort.Write(msg);
             }
             catch (Exception ex)
             {
+                this.Close();
             }
         }
 
@@ -159,12 +163,11 @@ namespace NotAmplifier
 
         public void Close()
         {
+            StatusTimer.Stop();
             if (!IsOpen)
             {
                 return;
             }
-            SendNapMessage(new Message(MessageOp.MSG_OP_PKM, 0, 0, 0));
-            StatusTimer.Stop();
             serialPort.Close();
         }
 
