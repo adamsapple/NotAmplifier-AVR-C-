@@ -37,7 +37,7 @@
             <TabItem x:Name="tiStatus">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
-                        <!--<TextBlock Style="{StaticResource Icon_Find}" />-->
+                        <TextBlock Style="{StaticResource Icon_Find}" />
                         <TextBlock Text="状態"/>
                     </StackPanel>
                 </TabItem.Header>
@@ -47,7 +47,7 @@
             <TabItem IsSelected="True">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
-                        <!--<TextBlock Style="{StaticResource Icon_Gear}" />-->
+                        <TextBlock Style="{StaticResource Icon_Gear}" />
                         <TextBlock Text="設定"/>
                     </StackPanel>
                 </TabItem.Header>
@@ -63,8 +63,7 @@
             <TabItem>
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
-                        <!--<Path Style="{StaticResource AboutIcon}" />-->
-                        <!--<TextBlock Style="{StaticResource Icon_Auther}" />-->
+                        <TextBlock Style="{StaticResource Icon_Auther}" />
                         <TextBlock Text="About"/>
                     </StackPanel>
                 </TabItem.Header>

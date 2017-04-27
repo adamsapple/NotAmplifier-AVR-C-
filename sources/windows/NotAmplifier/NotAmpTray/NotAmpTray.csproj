@@ -116,6 +116,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <Resource Include="resources\FontAwesome2.ttf" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

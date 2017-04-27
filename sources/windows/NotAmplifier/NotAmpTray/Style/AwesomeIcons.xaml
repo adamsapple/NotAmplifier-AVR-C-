@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:VolumeWatcher.Style">
-    <FontFamily x:Key="Awesome">/VolumeWatcher;component/resources/#FontAwesome</FontFamily>
+    <FontFamily x:Key="Awesome">/NotAmpTray;component/resources/#FontAwesome</FontFamily>
 
     <Style TargetType="TextBlock" x:Key="IconBase">
         <Style.Setters>

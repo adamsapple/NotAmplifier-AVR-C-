@@ -3,6 +3,6 @@
                     xmlns:local="clr-namespace:NotAmpTray.Style">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="TabControl.xaml" />
-        <!--<ResourceDictionary Source="AwesomeIcons.xaml" />-->
+        <ResourceDictionary Source="AwesomeIcons.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>
