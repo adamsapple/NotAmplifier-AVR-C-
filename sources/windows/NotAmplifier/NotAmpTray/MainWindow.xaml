@@ -42,6 +42,31 @@
                     </StackPanel>
                 </TabItem.Header>
                 <DockPanel Margin="8" ScrollViewer.VerticalScrollBarVisibility="Disabled" RenderOptions.EdgeMode="Aliased" LastChildFill="False">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="5*"/>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Volume"    Grid.Row="0" Grid.Column="0" />
+                        <TextBlock Text="Mic-Level" Grid.Row="1" Grid.Column="0" />
+                        <TextBlock Text="Mic-Power" Grid.Row="2" Grid.Column="0" />
+
+                        <Border Grid.Row="0" Grid.Column="1" Margin="6,0,0,0" BorderThickness="0,0,0,1" BorderBrush="Black" Width="26" >
+                            <TextBlock Text="0" HorizontalAlignment="Right" />
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="1" Margin="6,0,0,0" BorderThickness="0,0,0,1" BorderBrush="Black" >
+                            <TextBlock Text="0" HorizontalAlignment="Right" />
+                        </Border>
+                        <Border Grid.Row="2" Grid.Column="1" Margin="6,0,0,0" BorderThickness="0,0,0,1" BorderBrush="Black" >
+                            <TextBlock Text="true" HorizontalAlignment="Right" />
+                        </Border>
+                    </Grid>
                 </DockPanel>
             </TabItem>
             <TabItem IsSelected="True">
