@@ -45,6 +45,28 @@
 #define PORT_LED				PORTB
 #define PORT_LED_BIT			PB0
 
+#define DDR_LED_CONNECT			DDRD
+#define PORT_LED_CONNECT		PORTD
+#define PORT_LED_CONNECT_BIT	PD5
+
+#define DDR_LED_WDT				DDRD
+#define PORT_LED_WDT			PORTD
+#define PORT_LED_WDT_BIT		PD6
+
+
+#define LED_ON()				PORT_LED |= _BV(PORT_LED_BIT)
+#define LED_OFF()				PORT_LED &= ~_BV(PORT_LED_BIT)
+#define LED_TOGGLE()			PORT_LED ^= _BV(PORT_LED_BIT)
+
+
+#define LED_CONNECT_ON()		PORT_LED_CONNECT |= _BV(PORT_LED_CONNECT_BIT)
+#define LED_CONNECT_OFF()		PORT_LED_CONNECT &= ~_BV(PORT_LED_CONNECT_BIT)
+#define LED_CONNECT_TOGGLE()	PORT_LED_CONNECT ^= _BV(PORT_LED_CONNECT_BIT)
+
+#define LED_WDT_ON()			PORT_LED_WDT |= _BV(PORT_LED_WDT_BIT)
+#define LED_WDT_OFF()			PORT_LED_WDT &= ~_BV(PORT_LED_WDT_BIT)
+#define LED_WDT_TOGGLE()		PORT_LED_WDT ^= _BV(PORT_LED_WDT_BIT)
+
 //=====================================
 //! PWM(VU-Meter) PORT
 //=====================================

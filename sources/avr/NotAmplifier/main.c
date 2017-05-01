@@ -107,7 +107,8 @@ ISR(TIMER0_COMPB_vect)
 
 	OCR0B = (OCR0B-(256-COUNTER_LED_OP)+256)&0xFF;	// 比較値を減算していくことで、COUNTER_LED_OPのカウンタの代用にする
 
-	PORT_LED ^= _BV(PORT_LED_BIT);
+	//PORT_LED ^= _BV(PORT_LED_BIT);
+	LED_TOGGLE();
 }
 
 ISR(WDT_OVERFLOW_vect)
@@ -128,7 +129,8 @@ ISR(WDT_OVERFLOW_vect)
 		//WDTCSR ^= _BV(WDE);
 		//WDTCSR ^= _BV(WDIE);
 	}
-	PORT_LED ^= _BV(PORT_LED_BIT);
+	//PORT_LED ^= _BV(PORT_LED_BIT);
+	LED_WDT_TOGGLE();
 	sei();
 }
 
@@ -151,25 +153,30 @@ static inline void initialize()
 		MIC_PWR_IN	(IN)	PB3(PCINT3)
 		PMT_PWM		(--)	PB2(OC0A)
 		RELAY_SWT	(OUT)	PB1
+		LED			(OUT)	PB0
 		RESET		(--)	PA2
 		USART_RX	(--)	PD0
 		USART_TX	(--)	PD1
-		LED_LISTEN	(OUT)	PD2
-		LED_CONNECT	(OUT)	PD3
-		LED_PING	(OUT)	PD5
-		RTS			(IN)	PA1
-		CTS			(OUT)	PA0
+		USART_RTS	(IN)	PA1
+		USART_CTS	(OUT)	PA0
+		LED_CONNECT	(OUT)	PD5
+		LED_WDT		(OUT)	PD6
 		
 		(未使用)
-			PD4,PD6
-			PB0
+			PD2, PD3, PD4
 	*/
 
 	//======================================
 	// port configuration.
 	//======================================
 	DDR_LED	 |= _BV(PORT_LED_BIT);				// LED制御ポートの該当BITを出力設定に。
-	PORT_LED &= ~_BV(PORT_LED_BIT);				// PORT_LED_BITをLOに設定
+	LED_OFF();
+
+	DDR_LED_CONNECT	 |= _BV(PORT_LED_CONNECT_BIT);
+	LED_CONNECT_OFF();
+
+	DDR_LED_WDT	 |= _BV(PORT_LED_WDT_BIT);
+	LED_WDT_OFF();
 
 	DDR_PWM	 |= _BV(PORT_PWM_BIT);				// PWM出力ポートの該当BITを出力設定に。
 	PORT_PWM &= ~_BV(PORT_PWM_BIT);				// PORT_PWM_BITをLOに設定
@@ -289,6 +296,8 @@ int main()
 	while(1)
 	{
 		usart_process = 0;
+		LED_CONNECT_OFF();
+		LED_WDT_OFF();
 		usart_recieve_bytes_wdt(buf, sizeof(buf));		//!< 受信
 		opid = namp_msg_get(&msg, buf);					//!< message解析
 		
@@ -298,6 +307,7 @@ int main()
 			continue;
 		}
 		wdt_reset();
+		LED_CONNECT_ON();
 
 		if(opid == MSG_OP_ID_WAY)
 		{
