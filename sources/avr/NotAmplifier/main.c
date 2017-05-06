@@ -153,17 +153,17 @@ static inline void initialize()
 		MIC_PWR_IN	(IN)	PB3(PCINT3)
 		PMT_PWM		(--)	PB2(OC0A)
 		RELAY_SWT	(OUT)	PB1
-		LED			(OUT)	PB0
+		LED			(OUT)	PD5
 		RESET		(--)	PA2
 		USART_RX	(--)	PD0
 		USART_TX	(--)	PD1
 		USART_RTS	(IN)	PA1
 		USART_CTS	(OUT)	PA0
-		LED_CONNECT	(OUT)	PD5
-		LED_WDT		(OUT)	PD6
+		LED_CONNECT	(OUT)	PD3
+		LED_WDT		(OUT)	PD4
 		
 		(–¢Žg—p)
-			PD2, PD3, PD4
+			PB0, PD2, PD6
 	*/
 
 	//======================================

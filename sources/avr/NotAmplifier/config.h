@@ -41,17 +41,17 @@
 //=====================================
 //! LED PORT
 //=====================================
-#define DDR_LED					DDRB
-#define PORT_LED				PORTB
-#define PORT_LED_BIT			PB0
+#define DDR_LED					DDRD
+#define PORT_LED				PORTD
+#define PORT_LED_BIT			PD5
 
 #define DDR_LED_CONNECT			DDRD
 #define PORT_LED_CONNECT		PORTD
-#define PORT_LED_CONNECT_BIT	PD5
+#define PORT_LED_CONNECT_BIT	PD3
 
 #define DDR_LED_WDT				DDRD
 #define PORT_LED_WDT			PORTD
-#define PORT_LED_WDT_BIT		PD6
+#define PORT_LED_WDT_BIT		PD4
 
 
 #define LED_ON()				PORT_LED |= _BV(PORT_LED_BIT)
