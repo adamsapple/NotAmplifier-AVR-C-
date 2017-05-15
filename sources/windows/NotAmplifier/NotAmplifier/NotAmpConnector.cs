@@ -49,8 +49,10 @@ namespace NotAmplifier
 
 
         public VolumeMonitor volumeMonitor;               // CoreAudio連携(デバイスの状態変更を監視し通知)
+        public VolumeMonitor micMonitor;                  // CoreAudio連携(デバイスの状態変更を監視し通知)
 
-
+        private int prev_volume  = -10;
+        private int prev_mic     = -10;
 
         public NotAmpConnector()
         {
@@ -70,9 +72,12 @@ namespace NotAmplifier
 
 
             // VolumeMonitor初期化
-            volumeMonitor = new VolumeMonitor(EDataFlow.eRender, ERole.eConsole);
+            volumeMonitor   = new VolumeMonitor(EDataFlow.eRender, ERole.eConsole);
+            micMonitor      = new VolumeMonitor(EDataFlow.eCapture, ERole.eConsole);
             volumeMonitor.initDevice();
+            micMonitor.initDevice();
 
+            
 
 
             StatusTimer.Tick += (o, el) => {
@@ -131,12 +136,32 @@ namespace NotAmplifier
 
                 switch (MessageOp.OpToType(msg.op))
                 {
+                    case MessageType.MSG_OP_ID_VOL:
+                        if(Math.Abs(msg.val_i_a - prev_volume) < 2)
+                        {
+                            break;
+                        }
+                        prev_volume = msg.val_i_a;
+                        volumeMonitor.AudioVolume.MasterVolumeLevelScalar = msg.val_i_a / 1023f;
+                        break;
+
+                    case MessageType.MSG_OP_ID_MIC:
+                        if (Math.Abs(msg.val_i_a - prev_mic) < 2)
+                        {
+                            break;
+                        }
+                        prev_mic = msg.val_i_a;
+                        micMonitor.AudioVolume.MasterVolumeLevelScalar = msg.val_i_a / 1023f;
+                        break;
+
                     case MessageType.MSG_OP_ID_IAM:
                         StatusTimer.Interval = intervalPKM;
                         break;
+
                     case MessageType.MSG_OP_ID_MPW:
                         //Debug.WriteLine(msg.val_i_a);
-                        volumeMonitor.AudioVolume.Mute = !(msg.val_i_a == 1);
+                        //volumeMonitor.AudioVolume.Mute = !(msg.val_i_a == 1);
+                        micMonitor.AudioVolume.Mute = !(msg.val_i_a == 1);
                         break;
                 }
 

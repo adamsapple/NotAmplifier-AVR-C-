@@ -241,8 +241,8 @@ static inline void initialize()
  * @return	none
  */
 void status_update(namp_status* pstats){
-	pstats->mic = 1;//(pstats->mic+1) & MIC_MASK;
-	pstats->vol = 2;//(pstats->vol+2) & VOL_MASK;
+	pstats->mic =  mcp3002d_get( 1 );//(pstats->mic+1) & MIC_MASK;
+	pstats->vol =  mcp3002d_get( 0 );//(pstats->vol+2) & VOL_MASK;
 	pstats->mpw = GET_MPW();
 	//pstats->pkm = 0;
 }
