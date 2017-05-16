@@ -53,6 +53,7 @@ namespace NotAmplifier
 
         private int prev_volume  = -10;
         private int prev_mic     = -10;
+        private static readonly int NOTAMP_DAC_BIT_WIDTH = 10;
 
         public NotAmpConnector()
         {
@@ -91,7 +92,7 @@ namespace NotAmplifier
                 else if (timer.Interval == intervalPKM)
                 {
                     var renderMeter = volumeMonitor.AudioDevice?.AudioMeterInformation;
-                    var value = (Int16)Math.Round((renderMeter?.PeakValue ?? 0) * 1023);
+                    var value = (Int16)Math.Round((renderMeter?.PeakValue ?? 0) * (1<< NOTAMP_DAC_BIT_WIDTH)-1);
                     SendNapMessage(new Message(MessageOp.MSG_OP_PKM, value, 0, 0));
                 }
             };
@@ -142,7 +143,7 @@ namespace NotAmplifier
                             break;
                         }
                         prev_volume = msg.val_i_a;
-                        volumeMonitor.AudioVolume.MasterVolumeLevelScalar = msg.val_i_a / 1023f;
+                        volumeMonitor.AudioVolume.MasterVolumeLevelScalar = msg.val_i_a / (float)((1 << NOTAMP_DAC_BIT_WIDTH) - 1);
                         break;
 
                     case MessageType.MSG_OP_ID_MIC:
@@ -151,7 +152,7 @@ namespace NotAmplifier
                             break;
                         }
                         prev_mic = msg.val_i_a;
-                        micMonitor.AudioVolume.MasterVolumeLevelScalar = msg.val_i_a / 1023f;
+                        micMonitor.AudioVolume.MasterVolumeLevelScalar = msg.val_i_a / (float)((1 << NOTAMP_DAC_BIT_WIDTH) - 1);
                         break;
 
                     case MessageType.MSG_OP_ID_IAM:
